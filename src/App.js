@@ -6,18 +6,11 @@ import useHttp from "./hooks/use-http";
 
 
 function App() {
-
-  console.log("App")
   const [products, setProducts] = useState([]);
   const {isLoading, error, sendHttpRequest: fetchProducts} = useHttp();
 
-
-
   useEffect(() => {
-    console.log("fetchProducts in useEffect");
-
     const manageProducts = productsData => {
-      console.log("manageProducts")
       const loadedProducts = [];
       for (const productKey in productsData) {
         loadedProducts.push({ id: productKey, text: productsData[productKey].text });
@@ -27,7 +20,7 @@ function App() {
 
     fetchProducts({
       endpoint: "https://react-http-custom-hook-10a71-default-rtdb.firebaseio.com/products.json"
-    }, manageProducts);
+    }, manageProducts).then(() => {});
   }, [fetchProducts]);
 
   const productAddHandler = (product) => {

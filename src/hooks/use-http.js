@@ -1,19 +1,13 @@
 import {useCallback, useState} from "react";
 
 const useHttp = () => {
-
-  console.log("useHttp");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const sendHttpRequest = useCallback(async (requestOptions, manageData) => {
-    console.log("sendHttpRequest");
-    console.log("setIsLoading");
     setIsLoading(true);
-    console.log("setError");
     setError(null);
     try {
-      console.log("fetch");
       const response = await fetch(
         requestOptions.endpoint, {
           method: requestOptions.method ? requestOptions.method : "GET",
