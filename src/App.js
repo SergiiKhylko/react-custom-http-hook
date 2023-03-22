@@ -2,38 +2,25 @@ import React, { useEffect, useState } from "react";
 
 import Products from "./components/Products/Products";
 import NewProduct from "./components/NewProduct/NewProduct";
+import useHttp from "./hooks/use-http";
 
 function App() {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+
   const [products, setProducts] = useState([]);
 
-  const fetchProducts = async (productText) => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      const response = await fetch(
-        "https://react-http-custom-hook-10a71-default-rtdb.firebaseio.com/products.json"
-      );
-
-      if (!response.ok) {
-        throw new Error("Request error.");
-      }
-
-      const data = await response.json();
-
-      const loadedProducts = [];
-
-      for (const productKey in data) {
-        loadedProducts.push({ id: productKey, text: data[productKey].text });
-      }
-
-      setProducts(loadedProducts);
-    } catch (err) {
-      setError(err.message || "Something went wrong");
+  const manageProducts = productsData => {
+    const loadedProducts = [];
+    for (const productKey in productsData) {
+      loadedProducts.push({ id: productKey, text: productsData[productKey].text });
     }
-    setIsLoading(false);
-  };
+    setProducts(loadedProducts);
+  }
+
+  const {isLoading, error, sendHttpRequest: fetchProducts} = useHttp({
+    endpoint: "https://react-http-custom-hook-10a71-default-rtdb.firebaseio.com/products.json",
+    manageProducts
+  });
+
 
   useEffect(() => {
     fetchProducts();
